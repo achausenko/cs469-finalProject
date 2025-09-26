@@ -17,7 +17,7 @@ services:
 
   ssl_server1:
     build:
-      context: ../  # Adjust path to your project root where ssl_server.c lives
+      context: ../  #adjust path to your project root where ssl_server.c lives
       dockerfile: Dockerfile.server
     container_name: ssl_server1
     restart: unless-stopped
