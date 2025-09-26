@@ -44,8 +44,8 @@
  * Includes SSL connection and MySQL connection
  */
 typedef struct {
-    SSL *ssl;       ///TLS connection
-    MYSQL *db_conn; ///MySQL connection
+    SSL *ssl;       //TLS connection
+    MYSQL *db_conn; //MySQL connection
 } conn_ctx_t;
 
 /**
