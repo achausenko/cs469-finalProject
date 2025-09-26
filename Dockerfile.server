@@ -1,0 +1,8 @@
+FROM ubuntu:22.04
+RUN apt-get update && apt-get install -y build-essential libssl-dev libmysqlclient-dev
+WORKDIR /app
+COPY . /app
+RUN gcc -Wall -pthread -o ssl_server ssl_server.c -lssl -lcrypto -lmysqlclient
+EXPOSE 8443 8444
+CMD ["./ssl_server"]
+

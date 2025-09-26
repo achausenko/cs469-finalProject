@@ -1,0 +1,54 @@
+version: "3.8"
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: todo_mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: todo_db
+      MYSQL_USER: dbuser
+      MYSQL_PASSWORD: dbpass
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  ssl_server1:
+    build:
+      context: ../  # Adjust path to your project root where ssl_server.c lives
+      dockerfile: Dockerfile.server
+    container_name: ssl_server1
+    restart: unless-stopped
+    depends_on:
+      - mysql
+    ports:
+      - "8443:8443"
+    environment:
+      SERVER_PORT: 8443
+      DB_HOST: mysql
+      DB_USER: dbuser
+      DB_PASS: dbpass
+      DB_NAME: todo_db
+
+  ssl_server2:
+    build:
+      context: ../
+      dockerfile: Dockerfile.server
+    container_name: ssl_server2
+    restart: unless-stopped
+    depends_on:
+      - mysql
+    ports:
+      - "8444:8444"
+    environment:
+      SERVER_PORT: 8444
+      DB_HOST: mysql
+      DB_USER: dbuser
+      DB_PASS: dbpass
+      DB_NAME: todo_db
+
+volumes:
+  mysql_data:
+
