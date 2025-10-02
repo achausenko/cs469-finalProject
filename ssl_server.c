@@ -34,7 +34,7 @@
 #define CA_CERT     "ca.crt"
 
 //MySQL credentials (adjust to your Docker setup)
-#define DB_HOST "todo_mysql"  ///use Docker service name if in same network
+#define DB_HOST "todo_mysql"  //use Docker service name if in same network
 #define DB_USER "dbuser"
 #define DB_PASS "dbpass"
 #define DB_NAME "todo_db"
@@ -74,7 +74,10 @@ void *connection_thread(void *arg) {
         memset(buf, 0, sizeof(buf));
         r = SSL_read(ssl, buf, sizeof(buf)-1);
         if(r <= 0) break;      //connection closed
-        if(buf[r-1]=='\n') buf[r-1]=0; //remove newline
+        buf[r] = 0;
+
+        //FIXED: remove both trailing \r and \n from input to handle Windows/Linux line endings
+        while(r > 0 && (buf[r-1] == '\n' || buf[r-1] == '\r')) buf[--r] = 0;
 
         //LIST command
         if(strncmp(buf,"LIST",4)==0) {
